@@ -1,0 +1,13 @@
+code,name,geo_filter,
+nama_10_gdp,GDP,LV,
+prc_hicp_manr,Inflation,LV,
+une_rt_m,Unemployment rate,LV,
+lfsi_emp_q,Employment,LV,
+nama_10_exi,Exports,LV
+nama_10_exi,Imports,LV
+migr_emi1ctz,Emigration of citizens,LV,
+road_pa_mov,National passenger road transport performance,LV,
+tran_hv_frtra,Heavy vehicle freight,LV,
+nrg_pc_202,Energy consumption per capita,LV,
+SM.POP.NETM,Net migration,LV,
+demo_pjan,Population,LV,
