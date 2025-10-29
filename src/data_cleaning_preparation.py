@@ -1,0 +1,37 @@
+import re
+import pandas as pd
+import os
+
+# === Paths ===
+base_dir = os.path.dirname(__file__)
+raw_dir = os.path.join(base_dir, '../data/raw')
+processed_dir = os.path.join(base_dir, '../data/processed')
+
+for file in os.listdir(raw_dir):
+    if not file.endswith("_raw.csv"):
+        continue
+
+    print(f"Обрабатываем {file} ...")
+
+    file_path = os.path.join(raw_dir, file)
+    df = pd.read_csv(file_path)
+
+    # Определяем колонки с периодами: содержат год, месяц или квартал
+    period_cols = [c for c in df.columns if c[:4].isdigit() or 'Q' in c]
+
+    # Все остальные колонки — метаданные
+    meta_cols = [c for c in df.columns if c not in period_cols]
+
+    # Melt в длинный формат
+    df_long = df.melt(
+        id_vars=meta_cols,
+        value_vars=period_cols,
+        var_name='TIME_PERIOD',
+        value_name='VALUE'
+    )
+
+    # Сохраняем результат
+    output_file = os.path.join(processed_dir, os.path.basename(file).replace(".csv", "_long.csv"))
+    df_long.to_csv(output_file, index=False)
+
+    print(f"Готово: {len(df_long)} строк → {output_file}")
