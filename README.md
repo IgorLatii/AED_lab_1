@@ -1,1 +1,0 @@
-All datasets were downloaded manually from Eurostat in CSV format.
