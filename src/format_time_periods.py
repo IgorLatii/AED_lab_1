@@ -20,10 +20,13 @@ for file in os.listdir(initial_dir):
     mask_year = tp.str.match(r'^\d{4}$')
     mask_month = tp.str.match(r'^\d{4}-\d{2}$')
     mask_quarter = tp.str.match(r'^\d{4}-Q[1-4]$')
+    mask_semester = tp.str.match(r'^\d{4}-S[1-2]$')
 
+    # --- год ---
     df.loc[mask_year, 'TIME_PERIOD'] = pd.to_datetime(tp[mask_year] + '-01-01', format='%Y-%m-%d', errors='coerce')
+    # --- месяц ---
     df.loc[mask_month, 'TIME_PERIOD'] = pd.to_datetime(tp[mask_month] + '-01', format='%Y-%m-%d', errors='coerce')
-
+    # --- квартал ---
     years = tp[mask_quarter].str[:4].astype(int)
     quarters = tp[mask_quarter].str[-1].astype(int)
     months = (quarters - 1) * 3 + 1
@@ -32,8 +35,15 @@ for file in os.listdir(initial_dir):
         format='%Y-%m-%d',
         errors='coerce'
     )
-
-    #df['TIME_PERIOD'] = pd.to_datetime(df['TIME_PERIOD'], errors='coerce')
+    # --- семестр ---
+    years_s = tp[mask_semester].str[:4].astype(int)
+    semesters = tp[mask_semester].str[-1].astype(int)
+    months_s = (semesters - 1) * 6 + 1  # S1 -> январь, S2 -> июль
+    df.loc[mask_semester, 'TIME_PERIOD'] = pd.to_datetime(
+        years_s.astype(str) + '-' + months_s.astype(str).str.zfill(2) + '-01',
+        format='%Y-%m-%d',
+        errors='coerce'
+    )
 
     # Можно отсортировать, если нужно
     df = df.sort_values('TIME_PERIOD')
