@@ -5,7 +5,7 @@ import os
 # === Paths ===
 base_dir = os.path.dirname(__file__)
 raw_dir = os.path.join(base_dir, '../data/raw')
-processed_dir = os.path.join(base_dir, '../data/processed')
+processed_dir = os.path.join(base_dir, '../data/processed/transformed_to_long_format')
 
 for file in os.listdir(raw_dir):
     if not file.endswith("_raw.csv"):
