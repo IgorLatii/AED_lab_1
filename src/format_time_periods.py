@@ -1,9 +1,13 @@
 import pandas as pd
 import os
 
+# === Paths ===
 base_dir = os.path.dirname(__file__)
 initial_dir = os.path.join(base_dir, '../data/processed/transformed_to_long_format')
 processed_dir = os.path.join(base_dir, '../data/processed/formatted_time_periods')
+# === Create data folder if it doesn't exist ===
+os.makedirs(processed_dir, exist_ok=True)
+
 
 for file in os.listdir(initial_dir):
     if not file.endswith('_long.csv'):

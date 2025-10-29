@@ -6,6 +6,8 @@ import os
 base_dir = os.path.dirname(__file__)
 data_dir = os.path.join(base_dir, '../data/raw')
 indicators_path = os.path.join(base_dir, '../reports/indicators.csv')
+# === Create data folder if it doesn't exist ===
+os.makedirs(data_dir, exist_ok=True)
 
 # === Load indicators ===
 indicators = pd.read_csv(indicators_path)
