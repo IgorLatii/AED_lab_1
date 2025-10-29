@@ -1,13 +1,16 @@
 code,name,geo_filter,
-nama_10_gdp,GDP,LV,
+namq_10_gdp,GDP,LV,
 prc_hicp_manr,Inflation,LV,
 une_rt_m,Unemployment rate,LV,
 lfsi_emp_q,Employment,LV,
-nama_10_exi,Exports,LV
-nama_10_exi,Imports,LV
+nama_10_exi,Exports and imports by counterpart area,LV
 migr_emi1ctz,Emigration of citizens,LV,
 road_pa_mov,National passenger road transport performance,LV,
 tran_hv_frtra,Heavy vehicle freight,LV,
 nrg_pc_202,Energy consumption per capita,LV,
 SM.POP.NETM,Net migration,LV,
 demo_pjan,Population,LV,
+avia_paocc, Air passenger transport, LV,
+sts_inpr_m,Industrial production index,LV,
+sts_trtu_m,Retail trade turnover index,LV,
+tour_occ_nim,Tourism nights spent,LV,

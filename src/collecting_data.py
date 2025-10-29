@@ -2,40 +2,35 @@ import eurostat
 import pandas as pd
 import os
 
-# === Пути к файлам ===
+# === File paths ===
 base_dir = os.path.dirname(__file__)
 data_dir = os.path.join(base_dir, '../data/raw')
 indicators_path = os.path.join(base_dir, '../reports/indicators.csv')
 
-# Создаём папку для данных, если её нет
-os.makedirs(data_dir, exist_ok=True)
+# === Load indicators ===
+indicators = pd.read_csv(indicators_path)
 
-# === Загружаем список индикаторов ===
-indicators = pd.read_csv(indicators_path, sep='\t')  # если CSV с табами
-if 'code' not in indicators.columns:
-    indicators = pd.read_csv(indicators_path, sep=',')  # fallback
+print(f"Found {len(indicators)} indicators to load...")
 
-print(f"Найдено {len(indicators)} индикаторов для загрузки...")
-
-# === Основной цикл ===
+# === Iterate through all selected codes and download data ===
 for _, ind in indicators.iterrows():
     code = ind['code']
     name = ind.get('name', code)
 
-    print(f"🔽 Загружаем {name} ({code}) ...")
+    print(f"INFO: Loading {name} ({code}) ...")
     try:
-        # Загружаем весь набор данных
+        # Loading the entire dataset
         df = eurostat.get_data_df(code)
 
-        # Проверим структуру
-        print(f"  ✅ Успешно загружено: {df.shape[0]} строк, {df.shape[1]} колонок")
+        # Checking the structure
+        print(f"  SUCCESS: Successfully loaded: {df.shape[0]} rows, {df.shape[1]} columns")
 
-        # Сохраняем как есть (raw)
+        # Save as it is (raw)
         output_path = os.path.join(data_dir, f"{code}_raw.csv")
         df.to_csv(output_path, index=False)
-        print(f"  💾 Сохранено в: {output_path}")
+        print(f"  SUCCESS: Saved in: {output_path}")
 
     except Exception as e:
-        print(f"  ❌ Ошибка при загрузке {code}: {e}")
+        print(f"  ERROR: Error loading {code}: {e}")
 
-print("\n=== Завершено. Все доступные индикаторы сохранены в ../data/raw/ ===")
+print("\n=== Completed. All available indicators are saved in ../data/raw/ ===")
