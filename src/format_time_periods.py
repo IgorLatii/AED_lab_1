@@ -16,6 +16,9 @@ for file in os.listdir(initial_dir):
     path = os.path.join(initial_dir, file)
     df = pd.read_csv(path)
 
+    # --- Remove zero values (considered as missing or invalid data) ---
+    df = df[df["VALUE"] != 0]
+
     # --- Convert TIME_PERIOD to datetime ---
     tp = df['TIME_PERIOD'].astype(str) # Work with string representation of time
     df['TIME_PERIOD'] = df['TIME_PERIOD'].astype(object) # Prepare column for datetime assignment
@@ -56,4 +59,4 @@ for file in os.listdir(initial_dir):
     # --- Save the formatted CSV ---
     output = os.path.join(processed_dir, file.replace('_long.csv', '_formatted.csv'))
     df.to_csv(output, index=False)
-    print(f"✓ Saved: {output}")
+    print(f"Saved: {output}")
