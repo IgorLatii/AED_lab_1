@@ -1,7 +1,5 @@
 # **Exploratory Data Analysis — Latvia**
 **Author:** *Igor Latii*  
-**Course:** *European Development Indicators (Alexandru Monahov, 2025)*  
-
 ---
 
 ## 🧭 **Project Overview**
