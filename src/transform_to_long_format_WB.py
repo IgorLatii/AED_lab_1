@@ -1,3 +1,25 @@
+"""
+World Bank Data Transformation Script
+=====================================
+
+This script processes raw World Bank CSV files and converts them into a clean,
+standardized long-format structure for further analysis.
+
+Steps performed:
+1. Reads raw CSV files from ../data/raw/ (only those matching the World Bank pattern).
+2. Skips the initial metadata rows (first 4 lines).
+3. Cleans column names by trimming spaces.
+4. Identifies metadata columns and period columns (years).
+5. Transforms the dataset from wide to long format using pandas.melt().
+6. Converts VALUE fields to numeric and TIME_PERIOD to string.
+7. Filters the dataset to include only rows for Latvia.
+8. Removes empty rows (NaN values).
+9. Saves the cleaned output as *_long.csv into ../data/processed/transformed_to_long_format/.
+
+This preprocessing ensures that World Bank data is consistent with Eurostat datasets,
+allowing for seamless merging and annual aggregation in subsequent analysis steps.
+"""
+
 import os
 import pandas as pd
 

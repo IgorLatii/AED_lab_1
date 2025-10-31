@@ -1,3 +1,35 @@
+"""
+===============================================================================
+ Script Name: transform_to_long_format_EStat.py
+ Author: Igor Latii
+ Description:
+     This script converts Eurostat raw datasets from wide format to long format,
+     preparing them for consistent analysis and further time-based processing.
+
+ Workflow:
+     1. Load all raw CSV files from /data/raw/ that end with "_raw.csv".
+     2. Detect and rename Eurostat-specific columns (e.g., 'geo\\TIME_PERIOD' → 'geo').
+     3. Identify time-period columns (columns that start with a year or contain 'Q').
+     4. Separate metadata columns (non-period columns) from period data.
+     5. Transform each dataset from wide to long format using pandas.melt().
+     6. Remove empty or invalid rows (where VALUE is NaN).
+     7. Save the reshaped tables to /data/processed/transformed_to_long_format/
+        with the "_long.csv" suffix.
+
+ Output:
+     - One cleaned and reshaped long-format CSV file per indicator.
+     - Standard columns: TIME_PERIOD, VALUE, and all relevant metadata fields.
+
+ Purpose:
+     - Standardizes Eurostat datasets for temporal harmonization and merging.
+     - Serves as an intermediate step before date formatting and aggregation.
+
+ Dependencies:
+     - pandas
+     - os
+===============================================================================
+"""
+
 import pandas as pd
 import os
 

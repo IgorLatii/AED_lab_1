@@ -1,3 +1,35 @@
+"""
+===============================================================================
+ Script Name: format_time_periods.py
+ Author: Igor Latii
+ Description:
+     This script standardizes the TIME_PERIOD column across all Eurostat datasets
+     previously transformed into long format. It ensures temporal consistency
+     between indicators with different reporting frequencies (annual, quarterly,
+     monthly, and semestrial).
+
+ Workflow:
+     1. Load all CSV files from /data/processed/transformed_to_long_format/.
+     2. Remove rows with zero values (treated as missing data).
+     3. Detect the time format of each observation:
+          - YYYY          → annual (converted to January 1 of that year)
+          - YYYY-MM       → monthly (first day of the month)
+          - YYYY-Q[1–4]   → quarterly (first month of the respective quarter)
+          - YYYY-S[1–2]   → semestrial (January or July)
+     4. Convert all formats to a unified datetime structure.
+     5. Sort each dataset chronologically by TIME_PERIOD.
+     6. Save the cleaned and standardized output to /data/processed/formatted_time_periods/.
+
+ Output:
+     - One formatted CSV file per indicator with standardized time structure.
+     - Ensures that all datasets can be merged seamlessly in the next stage.
+
+ Dependencies:
+     - pandas
+     - os
+===============================================================================
+"""
+
 import pandas as pd
 import os
 

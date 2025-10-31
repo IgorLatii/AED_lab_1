@@ -1,3 +1,40 @@
+"""
+===============================================================================
+ Script Name: eda_visualization.py
+ Author: Igor Latii
+ Description:
+     This script performs Exploratory Data Analysis (EDA) on the final annual
+     dataset of Latvia’s economic, demographic, and transport indicators.
+
+     It automatically generates visualizations for three research questions (RQ1–RQ3):
+         • RQ1: Relationship between GDP, trade, and passenger transport.
+         • RQ2: Interaction between unemployment, migration, and population change.
+         • RQ3: Correlation between transport volumes and inflation.
+
+ Workflow:
+     1. Load the annual dataset (merged_df_annual.csv).
+     2. Filter observations from 1995 onwards to ensure consistent data coverage.
+     3. For each Research Question (RQ):
+         - Generate individual time series plots for all indicators.
+         - Create scatter plots for selected variable pairs to visualize relationships.
+         - Compute and visualize correlation matrices as heatmaps.
+         - Produce combined plots for multi-indicator comparison (RQ1 only).
+     4. Save all generated figures into dedicated subfolders under `/data/eda_plots/`.
+
+ Output:
+     • Time series plots for each indicator.
+     • Scatter plots for pairwise relationships.
+     • Correlation heatmaps for grouped indicators.
+     • Combined GDP–Exports–Transport visualization (for RQ1).
+
+ Dependencies:
+     - pandas
+     - matplotlib
+     - seaborn
+     - os
+===============================================================================
+"""
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt

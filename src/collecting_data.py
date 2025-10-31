@@ -1,3 +1,33 @@
+"""
+===============================================================================
+ Script Name: collecting_data.py
+ Author: Igor Latii
+ Description:
+     This script automates the data acquisition process from Eurostat for a
+     predefined list of indicators specified in the file `/reports/indicators.csv`.
+
+     It connects to the Eurostat API via the `eurostat` Python package, downloads
+     each dataset, filters it for the selected country (default: Latvia, LV), and
+     saves the cleaned raw data in CSV format to the `/data/raw/` directory.
+
+ Workflow:
+     1. Load the list of indicators and metadata from `/reports/indicators.csv`.
+     2. For each indicator:
+         - Fetch the corresponding dataset from the Eurostat API.
+         - Filter data for the selected country (geo = LV).
+         - Save the dataset as a raw CSV file in `/data/raw/`.
+     3. Log progress and handle missing or malformed datasets gracefully.
+
+ Output:
+     Raw CSV files in `../data/raw/`, one per indicator.
+
+ Dependencies:
+     - eurostat
+     - pandas
+     - os
+===============================================================================
+"""
+
 import eurostat
 import pandas as pd
 import os
