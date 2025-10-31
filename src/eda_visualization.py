@@ -3,20 +3,27 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# === Paths ===
+# === PATH CONFIGURATION ===
+# Define paths for the input (merged dataset) and output (plots) directories.
 input_file = "../data/processed/merged/merged_df_annual.csv"
 output_dir = "../data/eda_plots"
-os.makedirs(output_dir, exist_ok=True)
+os.makedirs(output_dir, exist_ok=True)  # Create output directory if it doesn’t exist
 
-# === Load data ===
+# === DATA LOADING ===
+# Load the merged dataset that contains all relevant economic indicators.
 df = pd.read_csv(input_file)
 
-# Фильтруем данные с 1995 года
+# Filter data to include only observations from 1995 onward.
+# Earlier data may be sparse or inconsistent across indicators.
 df = df[df['Year'] >= 1995].copy()
 
-# === Define RQs and their indicators ===
+# === DEFINE RESEARCH QUESTIONS (RQs) AND ASSOCIATED INDICATORS ===
+# Each RQ focuses on a thematic relationship between several economic factors.
+# Indicators define which variables are analyzed for each question,
+# and scatter_pairs specify variable combinations for correlation plots.
 RQs = {
     "RQ1_GDP_Trade_Passengers": {
+        # Investigates how GDP relates to trade and transport indicators.
         "indicators": ['GDP (Quarterly)', 'Exports (National Accounts)', 'Air Passenger Transport',
                        'Road Passenger Transport', 'Industrial Production Index', 'Retail Trade Turnover',
                        'Energy Prices'],
@@ -26,12 +33,14 @@ RQs = {
         "combined": ['GDP (Quarterly)', 'Exports (National Accounts)', 'Air Passenger Transport']
     },
     "RQ2_Unemployment_Migration": {
+        # Analyzes how unemployment correlates with migration trends and population changes.
         "indicators": ['Unemployment Rate', 'Net Migration (World Bank)', 'Emigration of Citizens',
                        'Population', 'Industrial Production Index', 'Retail Trade Turnover'],
         "scatter_pairs": [('Unemployment Rate', 'Emigration of Citizens'),
                           ('Net Migration (World Bank)', 'Population')]
     },
     "RQ3_Transport_Inflation": {
+        # Explores how transport activity correlates with inflation and production levels.
         "indicators": ['Inflation (HICP Manufacturing)', 'Freight Transport', 'Air Passenger Transport',
                        'Road Passenger Transport', 'Industrial Production Index', 'Retail Trade Turnover',
                        'Energy Prices'],
@@ -41,7 +50,8 @@ RQs = {
     }
 }
 
-# === Improved visual style ===
+# === VISUAL STYLE SETTINGS ===
+# Apply a consistent theme and font size for all plots for readability and publication-quality visuals.
 sns.set_theme(style="whitegrid", palette="Set2")
 plt.rcParams.update({
     "axes.titlesize": 14,
@@ -51,12 +61,22 @@ plt.rcParams.update({
     "legend.fontsize": 10
 })
 
-# === Function to generate plots for a given RQ ===
+# === FUNCTION: GENERATE EDA PLOTS FOR EACH RESEARCH QUESTION ===
 def generate_eda_plots(df, rq_name, indicators, scatter_pairs, combined=None):
+    """
+    Generates exploratory data analysis (EDA) plots for a specific Research Question (RQ).
+    Creates:
+      - Time series plots for each indicator
+      - Scatter plots for selected variable pairs
+      - Correlation heatmap across all indicators
+      - Combined multi-indicator plot (for RQ1)
+    Saves all figures to the respective output folder.
+    """
     rq_dir = os.path.join(output_dir, rq_name)
     os.makedirs(rq_dir, exist_ok=True)
 
-    # Time Series Plots (individual)
+    # === TIME SERIES PLOTS ===
+    # For each indicator, create a line plot showing its trend over time.
     for ind in indicators:
         plt.figure(figsize=(12, 4))
         sns.lineplot(data=df, x='Year', y=ind, linewidth=2)
@@ -68,7 +88,8 @@ def generate_eda_plots(df, rq_name, indicators, scatter_pairs, combined=None):
         plt.savefig(os.path.join(rq_dir, f'timeseries_{ind}.png'))
         plt.close()
 
-    # Combined Time Series (for RQ1)
+    # === COMBINED TIME SERIES (RQ1 ONLY) ===
+    # Overlay multiple indicators to compare their evolution on the same plot.
     if combined:
         plt.figure(figsize=(12, 6))
         for ind in combined:
@@ -82,7 +103,8 @@ def generate_eda_plots(df, rq_name, indicators, scatter_pairs, combined=None):
         plt.savefig(os.path.join(rq_dir, "combined_timeseries_GDP_Exports_Transport.png"))
         plt.close()
 
-    # Scatter Plots
+    # === SCATTER PLOTS ===
+    # Scatter plots help visualize pairwise relationships between two variables.
     for x, y in scatter_pairs:
         if x in df.columns and y in df.columns:
             plt.figure(figsize=(6, 4))
@@ -95,7 +117,10 @@ def generate_eda_plots(df, rq_name, indicators, scatter_pairs, combined=None):
             plt.savefig(os.path.join(rq_dir, f'scatter_{y}_vs_{x}.png'))
             plt.close()
 
-    # Correlation Heatmap
+    # === CORRELATION HEATMAP ===
+    # Compute and visualize correlations between all indicators.
+    # Values close to +1 indicate a strong positive correlation,
+    # values near -1 indicate an inverse relationship.
     corr_data = df[indicators].replace(0, pd.NA).dropna()
     if corr_data.empty:
         print(f"⚠️ Warning: No non-zero data for correlation heatmap in {rq_name}")
@@ -108,8 +133,9 @@ def generate_eda_plots(df, rq_name, indicators, scatter_pairs, combined=None):
         plt.savefig(os.path.join(rq_dir, 'correlation_heatmap.png'))
         plt.close()
 
-# === Generate plots for all RQs ===
+# === MAIN EXECUTION LOOP ===
+# Iterate over all defined research questions and generate their respective EDA outputs.
 for rq_name, rq_info in RQs.items():
     generate_eda_plots(df, rq_name, rq_info['indicators'], rq_info['scatter_pairs'], rq_info.get('combined'))
 
-print(f"🎯 EDA plots for all RQs saved in {output_dir}")
+print(f"SUCCESS: EDA plots for all RQs saved in {output_dir}")
